@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+//import EditarFilm from '../views/EditarFilm.vue'
+//import AgregarFilm from '../views/AgregarFilm.vue'
 
 Vue.use(VueRouter)
 
@@ -17,7 +19,17 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+  },
+  {
+    path: '/',
+    name: 'EditarFilm',
+    component: () => import(/* webpackChunkName: "about" */ '../views/EditarFilm.vue')
+  },
+  {
+    path: '/AgregarFilm',
+    name: 'AgregarFilm',
+    component: () => import(/* webpackChunkName: "about" */ '../views/AgregarFilm.vue')
+  },
 ]
 
 const router = new VueRouter({
