@@ -30,9 +30,7 @@
   color: #42b983;
 }
 .divEditar{
-  display: flex;
-  flex-direction: column;
-  align-items:center;
-  justify-content: left;
+  margin-left: 25%;
+  margin-right: 25%;
 }
 </style>

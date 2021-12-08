@@ -7,10 +7,14 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     film:{},
+    genres:[],
   },
   mutations: {
     setFilm(state, film){
       state.film = film;
+    },
+    setGenres(state, genres){
+      state.genres = genres;
     },
   },
   actions: {
@@ -30,6 +34,14 @@ export default new Vuex.Store({
       axios.post('http://localhost:3000/films', params)
       .then(onComplete)
       .catch(onError);
+    },
+    getGenres({commit}){
+      console.log("Entro en genres");
+      axios.get('http://localhost:3000/genres')
+      .then(response => {
+        commit('setGenres', response.data)
+      })
+      .catch(error => console.log(error))
     },
   },
   modules: {

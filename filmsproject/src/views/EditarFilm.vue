@@ -35,17 +35,19 @@
             :maxlength="200"
             placeholder="Ingrese Descripción"
           />
-          <Input
-            v-model="film.filmType"
-            :value="film.filmType"
-            id="filmType"
-            class="mb-2"
-            titulo="Tipo"
-            :maxlength="1"
-            placeholder="Ingrese un nombre"
-            :error="erroresValidacion && !validacionType"
-            mensajeError="El tipo es obligatorio"
-          />
+          <b-container>  
+            <label class="mb-2">Tipo: </label><br> 
+          <select v-model="film.filmType" class="mb-3" >
+                <option value="0">Seleccione Tipo</option>
+                <option v-for="(type, index) in types" 
+                    :key="index"
+                    :value="type.idType"
+                    >             
+                        {{type.name}} 
+                </option>
+            </select>
+            <span v-if="erroresValidacion" class="text-danger">Campo obligatorio</span>
+          </b-container>
           <Input
             v-model="film.filmYear"
             :value="film.filmYear"
@@ -78,8 +80,6 @@
         <b-button type="submit" variant="success">Guardar</b-button>
       </form>
     </div>
-    
-    {{film}}
   </div>
 </template>
 
@@ -97,6 +97,8 @@ export default {
   },
   data() {
     return {
+      types:[{idType:2, name: "Movie"},{idType:4, name: "Serie"},{idType:6, name: "Documental"},{idType:8, name: "Anime"}],
+      selected:0,
       fimmID: 0,
       editar: {
         filmDescription: "",
@@ -112,12 +114,12 @@ export default {
     ...mapState(['film']),
     validacionType() {
       return (
-        this.editar.filmType !== undefined && this.editar.filmType.trim() !== ""
+        this.film.filmType !== undefined && this.film.filmType != 0
       );
     },
     validacionYear() {
       return (
-        this.editar.filmYear !== undefined && this.editar.filmYear.trim() !== ""
+        this.film.filmYear !== undefined && this.film.filmYear.trim() !== ""
       );
     },
     
@@ -125,6 +127,11 @@ export default {
   methods: {
     ...mapActions(["getFilm", "editarFilm"]),
     guardarFilm() {
+      this.editar.filmDescription = this.film.filmDescription;
+      this.editar.filmType = this.film.filmType;
+      this.editar.filmYear = this.film.filmYear;
+      this.editar.filmReview = this.film.filmReview;
+      this.editar.filmScore = this.film.filmScore;
       console.log("Entro en guardado");
       if (this.validacionType && this.validacionYear) {
         this.erroresValidacion = false;
@@ -136,29 +143,27 @@ export default {
                 type: 'success',
                 title: response.data.mensaje
               });
-              
+              this.$router.push({
+                name: 'Home'
+              });
           },
           onError: (error) => {
             this.$notify({
               type: 'error',
               title: error.mensaje
             });
+
           }
         })
       } else {
         this.erroresValidacion = true;
       }
     },
-    
   },
   created() {
     var filmID = this.$route.params.filmID;
       this.getFilm(filmID);
-      this.editar.filmDescription = this.film.filmDescription;
-      this.editar.filmType = this.film.filmType;
-      this.editar.filmYear = this.film.filmYear;
-      this.editar.filmReview = this.film.filmReview;
-      this.editar.filmScore = this.film.filmScore;
+      
       //console.log
   }
 };

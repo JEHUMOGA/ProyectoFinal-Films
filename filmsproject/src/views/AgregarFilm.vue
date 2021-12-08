@@ -1,9 +1,9 @@
 <template>
   <div class="home">
     <h1>Guardar</h1>
-    <form  @submit.prevent="guardarFilm">
+    <form class="divEditar" @submit.prevent="guardarFilm">
         <Input
-            v-model="guardar.filmName"
+            v-model="film.filmName"
             id="filmName"
             class="mb-2"
             titulo="Nombre"
@@ -13,7 +13,7 @@
             mensajeError="El nombre es obligatorio"
         />
         <Input
-          v-model="guardar.filmDirector"
+          v-model="film.filmDirector"
           id="filmDirector"
           class="mb-2"
           titulo="Director"
@@ -23,35 +23,41 @@
           mensajeError="El director es obligatorio"
         />
         <Input
-          v-model="guardar.filmDescription"
+          v-model="film.filmDescription"
           id="filmDescription"
           class="mb-2"
           titulo="Descripcion"
           :maxlength="200"
           placeholder="Ingrese descripción"
         />
+        <b-container>  
+            <label class="mb-2">Tipo: </label><br> 
+          <select v-model="film.filmType" class="mb-3">
+                <option value="0">Seleccione Tipo</option>
+                <option v-for="(type, index) in types" 
+                    :key="index"
+                    :value="type.idType"
+                    >             
+                        {{type.name}} 
+                </option>
+            </select>
+            <span v-if="erroresValidacion" class="text-danger">Campo obligatorio</span>
+          </b-container>
+        <b-container>  
+            <label class="mb-2">Genero: </label><br> 
+          <select v-model="film.genID" class="mb-3" mensajeError="El genero es obligatorio" >
+                <option value="0">Seleccione Genero</option>
+                <option v-for="(genre, index) in genres" 
+                    :key="index"
+                    :value="genre.genID"
+                    >             
+                        {{genre.genName}} 
+                </option>
+            </select>
+            <span v-if="erroresValidacion" class="text-danger">Campo obligatorio</span>
+          </b-container>
         <Input
-          v-model="guardar.filmType"
-          id="filmType"
-          class="mb-2"
-          titulo="Tipo"
-          :maxlength="1"
-          placeholder="Ingrese tipo"
-          :error="erroresValidacion && !validacionType"
-          mensajeError="El tipo es obligatorio"
-        />
-        <Input
-          v-model="guardar.genID"
-          id="genID"
-          class="mb-2"
-          titulo="Genero"
-          :maxlength="500"
-          placeholder="Ingrese genero"
-          :error="erroresValidacion && !validacionGenre"
-          mensajeError="El genero es obligatorio"
-        />
-        <Input
-          v-model="guardar.filmYear"
+          v-model="film.filmYear"
           id="filmYear"
           class="mb-2"
           titulo="Año"
@@ -62,7 +68,6 @@
         />      
       <b-button type="submit" variant="success">Guardar</b-button>
     </form>
-    {{guardar}}
   </div>
 </template>
 
@@ -82,54 +87,55 @@ export default {
   },
   data() {
     return {
-      guardar: {
+      types:[{idType:2, name: "Movie"},{idType:4, name: "Serie"},{idType:6, name: "Documental"},{idType:8, name: "Anime"}],
+      film: {
         filmName: "",
         filmDirector: "",
         filmDescription: "",
-        filmType: "",
-        genID:"",
+        filmType: 0,
+        genID:0,
         filmYear:""
       },
       erroresValidacion: false,
     };
   },
   computed: {
-    //...mapState(['film']),
+    ...mapState(['genres']),
     validacionName() {
       return (
-        this.guardar.filmName !== undefined && this.guardar.filmName.trim() !== ""
+        this.film.filmName !== undefined && this.film.filmName.trim() !== ""
       );
     },
     validacionDirector() {
       return (
-        this.guardar.filmDirector !== undefined && this.guardar.filmDirector.trim() !== ""
+        this.film.filmDirector !== undefined && this.film.filmDirector.trim() !== ""
       );
     },
     validacionGenre() {
       return (
-        this.guardar.genID !== undefined && this.guardar.genID.trim() !== ""
+        this.film.genID !== undefined && this.film.genID!== 0
       );
     },
     validacionType() {
       return (
-        this.guardar.filmType !== undefined && this.guardar.filmType.trim() !== ""
+        this.film.filmType !== undefined && this.film.filmType !== 0
       );
     },
     validacionYear() {
       return (
-        this.guardar.filmYear !== undefined && this.guardar.filmYear.trim() !== ""
+        this.film.filmYear !== undefined && this.film.filmYear.trim() !== ""
       );
     },
     
   },
   methods: {
-    ...mapActions(["crearFilm"]),
+    ...mapActions(["crearFilm", "getGenres"]),
     guardarFilm() {
       console.log("Entro en guardado");
       if (this.validacionName && this.validacionDirector && this.validacionGenre && this.validacionType && this.validacionYear) {
         this.erroresValidacion = false;
         this.crearFilm({
-          params: this.guardar,
+          params: this.film,
           onComplete: (response) => {
               this.$notify({
                 type: 'success',
@@ -150,10 +156,11 @@ export default {
         this.erroresValidacion = true;
       }
     },
-    
   },
   created(){
     console.log("Entro en agregar");
+    this.getGenres();
+
   }
 }
 /*
