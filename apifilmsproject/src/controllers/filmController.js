@@ -47,6 +47,28 @@ function obtenerFilm(req, res) {
     }
 }
 
+function obtenerFilmAleatorio(req, res) {
+    if (connection) {
+        let query = `SELECT 
+                    film.filmID, film.filmName, film.filmDirector, film.filmType, film.filmYear, 
+                    genre.genID, genre.genName,
+                    favorites.favID
+                    FROM film 
+                    INNER JOIN genre ON genre.genID = film.genID
+                    LEFT JOIN favorites ON favorites.filmID = film.filmID
+                    ORDER BY RAND()
+                    LIMIT 1`;
+
+        connection.query(query, (err, films) => {
+            if (err) {
+                res.status(400).json(err);
+            } else {
+                res.json(films);
+            }
+        });
+    }
+}
+
 function crearFilm(req, res) {
     if(connection){
         const film = req.body;
@@ -157,5 +179,6 @@ module.exports = {
     obtenerFilm,
     crearFilm,
     editarFilm,
-    eliminarFilm
+    eliminarFilm,
+    obtenerFilmAleatorio
 }

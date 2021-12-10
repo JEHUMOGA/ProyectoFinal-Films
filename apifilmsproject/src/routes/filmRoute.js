@@ -6,6 +6,8 @@ const filmController = require('../controllers/filmController');
 
 routes.get('/films', filmController.listaFilms);
 
+routes.get('/filmAleatorio', filmController.obtenerFilmAleatorio);
+
 routes.get('/films/:filmID', filmController.obtenerFilm);
 
 routes.post('/films', filmController.crearFilm);
