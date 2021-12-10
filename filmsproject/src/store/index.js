@@ -11,6 +11,7 @@ export default new Vuex.Store({
     films: [],
     genres: [],
     favorites: [],
+    filtrados: [],
   },
   mutations: {
     setFilm(state, film){
@@ -27,7 +28,11 @@ export default new Vuex.Store({
     },
     setFavorites(state, favorites){
       state.favorites = favorites
-    }
+      state.filtrados = favorites
+    },
+    setFiltrados(state, filtrados){
+      state.filtrados = filtrados
+    },
   },
   actions: {
     getFilms({commit}){
@@ -96,6 +101,15 @@ export default new Vuex.Store({
       axios.delete(`http://localhost:3000/films/${id}`)
       .then(onComplete)
       .catch(onError);
+    },
+    getFavorites({commit}){
+      axios.get('http://localhost:3000/favorites')
+      .then(response => {
+        commit('setFavorites', response.data)
+      })
+    },
+    getFiltrados({commit}, {params}){
+      commit('setFiltrados', params)
     }
   },
   modules: {
