@@ -168,45 +168,5 @@ export default {
   }
 };
 
-/*
-computed
-
-validacionType() {
-      return (
-        this.film.filmType !== undefined && this.film.filmType.trim() !== ""
-      );
-    },
-    validacionYear() {
-      return (
-        this.film.filmYear !== undefined && this.film.filmYear.trim() !== ""
-      );
-    },
-
-methods
-guardarFilm() {
-      if (this.validacionType && this.validacionYear) {
-        this.erroresValidacion = false;
-        this.editarFilm({
-          filmID: this.film.filmID,
-          body: this.editar,
-          onComplete: (response) => {
-              this.$notify({
-                type: 'success',
-                title: response.data.mensaje
-              });
-              
-          },
-          onError: (error) => {
-            this.$notify({
-              type: 'error',
-              title: error.response.data.mensaje
-            });
-          }
-        })
-      } else {
-        this.erroresValidacion = true;
-      }
-    },
-*/
 </script>
 

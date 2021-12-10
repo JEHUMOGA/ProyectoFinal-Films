@@ -139,7 +139,7 @@ export default {
           onComplete: (response) => {
               this.$notify({
                 type: 'success',
-                title: response.mensaje
+                title: response.data.mensaje
               });
               this.$router.push({
               name: "Home",

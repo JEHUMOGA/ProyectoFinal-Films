@@ -27,8 +27,10 @@ export default new Vuex.Store({
     },
     editarFilm({commit}, {filmID, body, onComplete, onError}){
       axios.put(`http://localhost:3000/films/${filmID}`, body)
-      .then(onComplete)
-      .catch(onError);
+      .then(response =>{
+        onComplete(response)
+      })
+      .catch(onError,error => console.log(error));
     },
     crearFilm({commit}, {params, onComplete, onError}){
       axios.post('http://localhost:3000/films', params)
