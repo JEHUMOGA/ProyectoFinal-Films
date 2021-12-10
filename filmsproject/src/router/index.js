@@ -21,7 +21,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/',
+    path: '/EditarFilm/:filmID',
     name: 'EditarFilm',
     component: () => import(/* webpackChunkName: "about" */ '../views/EditarFilm.vue')
   },
@@ -29,6 +29,11 @@ const routes = [
     path: '/AgregarFilm',
     name: 'AgregarFilm',
     component: () => import(/* webpackChunkName: "about" */ '../views/AgregarFilm.vue')
+  },
+  {
+    path: '/VisualizarFilms',
+    name: 'VisualizarFilms',
+    component: () => import(/* webpackChunkName: "about" */ '../views/VisualizarFilms.vue')
   },
 ]
 

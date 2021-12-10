@@ -2,7 +2,9 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Inicio</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/AgregarFilm">Agregar film</router-link> |
+      <router-link to="/VisualizarFilms">Visualizar films</router-link> |
+      <router-link to="/FilmAleatorio">Film aleatorio</router-link>
     </div>
     <notifications position="top right" />
     <router-view/>
