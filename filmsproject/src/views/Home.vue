@@ -1,12 +1,9 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <form>
-      <input v-model="filmID" class="form-input" id="filmID" required placeholder="ID">
-      <b-button to="/AgregarFilm" variant="outline-primary">Agregar</b-button>
-      <b-button @click="editar(filmID)">Editar</b-button>
-    </form>
-    {{filmID}}
+    <Table :items="personas" :fields="campos" :busy="loading"/>
+      
+    
   </div>
 </template>
 
@@ -15,22 +12,30 @@
 //import HelloWorld from '@/components/HelloWorld.vue'
 import {mapState, mapActions} from 'vuex'
 import axios from 'axios'
+import Tabla from "../components/Tabla.vue";
 
 export default {
   name: 'Home',
   components: {
-    //HelloWorld
+    //HelloWorlds
+    Tabla,
   },
   data(){
     return {
-      filmID: 0
+      campos: [
+        { key: "filmName", label: "Nombre" },
+        { key: "filmDirector", label: "Nombre" },
+        
+      ]
+      
     }
   },
+  computed: {
+    ...mapState(["personas", "loading"]),
+  },
   methods: {
-    editar(ID){
-      console.log("ID paraeditar: " + ID)
-      this.$router.push({ name: 'EditarFilm' , params:{filmID: ID}});
-    }
+     ...mapActions(["setPersonas", "eliminarPersona"])
+    
   },
   
 }
