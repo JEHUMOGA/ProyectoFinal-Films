@@ -84,7 +84,7 @@ export default {
       this.$router.push({
         name: "Detalles",
         params: {
-          id: f.filmID,
+          filmID: f.filmID,
         },
       });
     },

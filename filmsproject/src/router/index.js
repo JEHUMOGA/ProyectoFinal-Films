@@ -35,6 +35,11 @@ const routes = [
     name: 'VisualizarFilms',
     component: () => import(/* webpackChunkName: "about" */ '../views/VisualizarFilms.vue')
   },
+  {
+    path: '/Detalles/:filmID',
+    name: 'Detalles',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Detalles.vue')
+  }
 ]
 
 const router = new VueRouter({
