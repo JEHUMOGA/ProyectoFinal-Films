@@ -10,7 +10,7 @@ export default new Vuex.Store({
     filmAleatorio: {},
     films: [],
     genres: [],
-    favorties: [],
+    favorites: [],
   },
   mutations: {
     setFilm(state, film){
@@ -24,6 +24,9 @@ export default new Vuex.Store({
     },
     setFilmAleatorio(state, filmAleatorio){
       state.filmAleatorio = filmAleatorio
+    },
+    setFavorites(state, favorites){
+      state.favorites = favorites
     }
   },
   actions: {
@@ -60,6 +63,11 @@ export default new Vuex.Store({
       .then(onComplete)
       .catch(onError);
     },
+    crearGenero({commit}, {params, onComplete, onError}){
+      axios.post('http://localhost:3000/genres', params)
+      .then(onComplete)
+      .catch(onError);
+    },
     getGenres({commit}){
       console.log("Entro en genres");
       axios.get('http://localhost:3000/genres')
@@ -67,6 +75,12 @@ export default new Vuex.Store({
         commit('setGenres', response.data)
       })
       .catch(error => console.log(error))
+    },
+    getFavorites({commit}){
+      axios.get('http://localhost:3000/favorites')
+      .then(response => {
+        commit('setFavorites', response.data)
+      })
     },
     añadirFavorito({commit}, {params, onComplete, onError}){
       axios.post('http://localhost:3000/favorites', params)

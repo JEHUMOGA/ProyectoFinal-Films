@@ -68,21 +68,30 @@
         />      
       <b-button type="submit" variant="success">Guardar</b-button>
     </form>
+    <form class="divEditar" @submit.prevent="guardarGenero">
+      <h1 class = "mt-5">Agregar genero</h1>
+      <Input
+          v-model="genre.genName"
+          id="genName"
+          class="mb-2"
+          titulo="Genero"
+          :maxlength="40"
+          placeholder="Ingrese nombre del genero"
+          :error="erroresGenero && !validacionNombreGenero"
+          mensajeError="El nombre del genero es obligatorio"
+        />
+        <b-button type="submit" variant="success">Crear genero</b-button>
+    </form>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-//import HelloWorld from '@/components/HelloWorld.vue'
-import Vue from 'vue'
 import { mapState,mapActions } from "vuex";
-import axios from 'axios'
 import Input from "../components/Input.vue";
 
 export default {
   name: 'Home',
   components: {
-    //HelloWorld
     Input,
   },
   data() {
@@ -97,6 +106,10 @@ export default {
         filmYear:""
       },
       erroresValidacion: false,
+      genre: {
+        genName: ""
+      },
+      erroresGenero: false
     };
   },
   computed: {
@@ -126,12 +139,16 @@ export default {
         this.film.filmYear !== undefined && this.film.filmYear.trim() !== ""
       );
     },
+    validacionNombreGenero(){
+      return(
+        this.genre.genName !== undefined && this.genre.genName.trim() !== ""
+      )
+    }
     
   },
   methods: {
-    ...mapActions(["crearFilm", "getGenres"]),
+    ...mapActions(["crearFilm", "crearGenero", "getGenres"]),
     guardarFilm() {
-      console.log("Entro en guardado");
       if (this.validacionName && this.validacionDirector && this.validacionGenre && this.validacionType && this.validacionYear) {
         this.erroresValidacion = false;
         this.crearFilm({
@@ -156,59 +173,35 @@ export default {
         this.erroresValidacion = true;
       }
     },
+    guardarGenero() {
+      if(this.validacionNombreGenero){
+      this.erroresGenero = false;
+        this.crearGenero({
+          params: this.genre,
+          onComplete: (response) => {
+            this.$notify({
+              type: 'success',
+              title: response.data.mensaje
+            });
+          },
+          onError: (error) => {
+            this.$notify({
+              type: 'error',
+              title: error.mensaje
+            });
+          }
+        })
+        this.genre.genName = ""
+      } else {
+        this.erroresGenero = true;
+      }
+    }
   },
   created(){
-    console.log("Entro en agregar");
     this.getGenres();
-
+  },
+  updated(){
+    this.getGenres();
   }
 }
-/*
-
-
-<Input
-            v-model="guardar.filmDirector"
-            id="filmDirector"
-            class="mb-2"
-            titulo="Director"
-            :maxlength="60"
-            disabled 
-          />
-          <Input
-            v-model="guardar.filmDescription"
-            id="filmDescription"
-            class="mb-2"
-            titulo="Descripcion"
-            :maxlength="200"
-            placeholder="Ingrese Descripción"
-          />
-          <Input
-            v-model="guardar.filmType"
-            id="filmType"
-            class="mb-2"
-            titulo="Tipo"
-            :maxlength="1"
-            placeholder="Ingrese un nombre"
-            :error="erroresValidacion && !validacionType"
-            mensajeError="El tipo es obligatorio"
-          />
-          <Input
-            v-model="guardar.genID"
-            id="genID"
-            class="mb-2"
-            titulo="Review"
-            :maxlength="500"
-            placeholder="Ingrese Genero"
-          />
-          <Input
-            v-model="guardar.filmYear"
-            id="filmYear"
-            class="mb-2"
-            titulo="Año"
-            :maxlength="4"
-            placeholder="Ingrese año"
-            :error="erroresValidacion && !validacionYear"
-            mensajeError="El año es obligatorio"
-          />   
-*/
 </script>
